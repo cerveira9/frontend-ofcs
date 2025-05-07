@@ -1,48 +1,118 @@
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { CheckCircle, AlertTriangle } from 'lucide-react';
 
 export default function EvaluationForm() {
   const [officers, setOfficers] = useState([]);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState('');
   const [skills, setSkills] = useState({});
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const skillList = [
-    'montarOcorrencia',
-    'abordagem',
-    'registroIdentidade',
-    'negociacao',
-    'efetuarPrisao',
-    'posicionamentoPatrulha',
-    'conhecimentoLeis'
+    'Ocorrência',
+    'Abordagem',
+    'Registro de Identidade',
+    'Negociação',
+    'Processo de Prisão',
+    'Patrulhamento',
+    'Conhecimento de Leis'
   ];
 
   useEffect(() => {
-    axios.get('http://localhost:5000/v1/api/officers/mostrarOficiais').then(res => setOfficers(res.data));
+    axios.get('http://localhost:5000/v1/api/officers/mostrarOficiais')
+      .then(res => setOfficers(res.data))
+      .catch(() => setError('Erro ao carregar oficiais.'));
   }, []);
+
+  const handleChange = (skill, value) => {
+    const val = parseInt(value);
+    if (val >= 0 && val <= 10) {
+      setSkills(prev => ({ ...prev, [skill]: val }));
+    }
+  };
 
   const submitEval = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:5000/v1/api/evaluations/cadastrarAvaliacao', {
-      officerId: selected,
-      skills
-    });
+    if (!selected || Object.keys(skills).length < skillList.length) {
+      setError('Preencha todos os campos antes de enviar.');
+      return;
+    }
+
+    try {
+      await axios.post('http://localhost:5000/v1/api/evaluations/cadastrarAvaliacao', {
+        officerId: selected,
+        skills
+      });
+      setSuccess(true);
+      setError('');
+      setSkills({});
+      setSelected('');
+      setTimeout(() => setSuccess(false), 3000);
+    } catch {
+      setError('Erro ao salvar a avaliação.');
+    }
   };
 
   return (
-    <form className="p-6 bg-white shadow-md rounded-md max-w-2xl mx-auto" onSubmit={submitEval}>
-      <h2 className="text-xl font-bold mb-4">Avaliar Oficial</h2>
-      <select className="input" onChange={e => setSelected(e.target.value)}>
-        <option value="">Selecione o Oficial</option>
-        {officers.map(o => <option value={o._id} key={o._id}>{o.name}</option>)}
-      </select>
+    <form
+      className="p-8 bg-white shadow-lg rounded-lg max-w-3xl mx-auto transition-all"
+      onSubmit={submitEval}
+    >
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Avaliar Oficial</h2>
 
-      {skillList.map(skill => (
-        <div key={skill} className="mt-4">
-          <label>{skill.replace(/([A-Z])/g, ' $1')}:</label>
-          <input type="number" min="0" max="10" onChange={e => setSkills(s => ({ ...s, [skill]: parseInt(e.target.value) }))} className="input" />
+      <div className="mb-4">
+        <label className="block mb-1 font-medium text-gray-700">Oficial Avaliado</label>
+        <select
+          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+          value={selected}
+          onChange={e => setSelected(e.target.value)}
+        >
+          <option value="">Selecione o Oficial</option>
+          {officers.map(o => (
+            <option value={o._id} key={o._id}>{o.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-4">
+        {skillList.map(skill => (
+          <div key={skill} className="flex flex-col">
+            <label className="mb-1 text-gray-700">{skill}</label>
+            <input
+              type="number"
+              min="0"
+              max="10"
+              value={skills[skill] ?? ''}
+              onChange={e => handleChange(skill, e.target.value)}
+              className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+              placeholder="Nota de 0 a 10"
+            />
+          </div>
+        ))}
+      </div>
+
+      {error && (
+        <div className="mt-4 flex items-center text-sm text-red-600 bg-red-100 p-3 rounded-md">
+          <AlertTriangle className="w-5 h-5 mr-2" /> {error}
         </div>
-      ))}
-      <button className="btn mt-4">Salvar Avaliação</button>
-    </form>
-  );
+      )}
+
+      {success && (
+        <div className="mt-4 flex items-center text-sm text-green-700 bg-green-100 p-3 rounded-md">
+          <CheckCircle className="w-5 h-5 mr-2" /> Avaliação salva com sucesso!
+        </div>
+      )}
+
+      <div className="flex justify-end mt-6">
+        <button
+          type="submit"
+          className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+        >
+          Salvar Avaliação
+        </button>
+      </div>
+    </form>
+  );
 }
