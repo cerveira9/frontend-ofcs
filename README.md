@@ -1,12 +1,43 @@
-# React + Vite
+# Frontend - Sistema de Avaliação de Oficiais
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface web moderna desenvolvida em React + TailwindCSS para cadastro, avaliação e visualização de oficiais.
 
-Currently, two official plugins are available:
+## Tecnologias
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React (Vite)
+- TailwindCSS
+- Axios
+- Lucide-react (ícones)
+- PostCSS
 
-## Expanding the ESLint configuration
+## Funcionalidades
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Telas:
+
+- **Cadastro de Oficial**
+  - Formulário para nome, patente e data de início.
+
+- **Avaliação de Oficial**
+  - Escolhe oficial e avalia 7 habilidades entre 0 e 10.
+  - Validação e mensagens de sucesso/erro com animações.
+
+- **Lista de Oficiais**
+  - Exibe cards por patente com:
+    - Nome e datas
+    - Flag de cor com base no tempo na patente
+    - Contagem de avaliações
+    - Botões de editar, deletar e visualizar avaliações (com animações inline)
+
+### Componentes:
+
+- `OfficerForm`: Cadastro
+- `EvaluationForm`: Avaliação
+- `OfficerList`: Exibição em cards
+- `EditOfficerForm`: Edição
+- `ViewEvaluations`: Visualização de avaliações com collapsible
+
+## Instruções
+
+```bash
+npm install
+npm run dev
