@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CheckCircle, AlertTriangle } from 'lucide-react';
@@ -20,6 +19,17 @@ export default function EvaluationForm() {
     'Conhecimento de Leis'
   ];
 
+  // Mapeia os rótulos visíveis para as chaves esperadas pelo backend
+  const labelToKey = {
+    'Ocorrência': 'montarOcorrencia',
+    'Abordagem': 'abordagem',
+    'Registro de Identidade': 'registroIdentidade',
+    'Negociação': 'negociacao',
+    'Processo de Prisão': 'efetuarPrisao',
+    'Patrulhamento': 'posicionamentoPatrulha',
+    'Conhecimento de Leis': 'conhecimentoLeis',
+  };
+
   useEffect(() => {
     axios.get('http://localhost:5000/v1/api/officers/mostrarOficiais')
       .then(res => setOfficers(res.data))
@@ -40,10 +50,16 @@ export default function EvaluationForm() {
       return;
     }
 
+    const convertedSkills = {};
+    for (const [label, value] of Object.entries(skills)) {
+      const key = labelToKey[label];
+      if (key) convertedSkills[key] = value;
+    }
+
     try {
       await axios.post('http://localhost:5000/v1/api/evaluations/cadastrarAvaliacao', {
         officerId: selected,
-        skills
+        skills: convertedSkills
       });
       setSuccess(true);
       setError('');
