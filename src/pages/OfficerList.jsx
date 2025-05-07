@@ -9,6 +9,24 @@ export default function OfficerList() {
 	const [editingId, setEditingId] = useState(null);
 	const editRef = useRef(null);
 
+	const hierarchy = [
+		"Cadete",
+		"Patrol Officer",
+		"Police Officer",
+		"Senior Officer",
+		"Deputy",
+		"Senior Deputy",
+		"Undersheriff / Deputy Chief",
+		"Sheriff / Chief of Police",
+		"Forest Ranger",
+		"Tracker Ranger",
+		"Senior Ranger",
+		"Captain Ranger",
+		"Commissioner",
+		"Deputy Marshal",
+		"Marshal",
+	];
+
 	useEffect(() => {
 		fetchOfficers();
 	}, []);
@@ -50,78 +68,95 @@ export default function OfficerList() {
 
 	const stopEditing = () => setEditingId(null);
 
+	const grouped = hierarchy
+		.map((rank) => ({
+			rank,
+			items: officers.filter((o) => o.rank === rank),
+		}))
+		.filter((g) => g.items.length > 0);
+
 	if (loading)
 		return (
 			<div className="text-center text-gray-500">Carregando oficiais...</div>
 		);
 
 	return (
-		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-			{officers.map((officer) => {
-				const isEditing = officer._id === editingId;
-				return (
-					<div
-						key={officer._id}
-						className={
-							`relative group bg-white border border-gray-200 rounded-xl p-5 shadow-sm transition-all duration-300 ` +
-							(isEditing
-								? "col-span-1 sm:col-span-2 lg:col-span-3 w-full"
-								: "hover:translate-x-2")
-						}
-						ref={isEditing ? editRef : null}
-					>
-						<div className="flex justify-between items-start">
-							<div className="w-full">
-								<div className="flex items-center mb-1">
-									<Users className="text-blue-500 mr-2" />
-									<h3 className="text-lg font-semibold text-gray-900">
-										{officer.name}
-									</h3>
-								</div>
-								<p className="text-sm text-blue-600 font-medium mb-1">
-									{officer.rank}
-								</p>
-								<p className="text-sm text-gray-500">
-									Início: {new Date(officer.startDate).toLocaleDateString()}
-								</p>
-								<p className="text-sm text-gray-500">
-									Registro: {new Date(officer.registerDate).toLocaleString()}
-								</p>
-							</div>
+		<div className="space-y-10">
+			{grouped.map((group) => (
+				<div key={group.rank}>
+					<h2 className="text-xl font-bold text-gray-700 border-b border-gray-300 mb-4">
+						{group.rank}
+					</h2>
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+						{group.items.map((officer) => {
+							const isEditing = officer._id === editingId;
+							return (
+								<div
+									key={officer._id}
+									className={
+										"relative group bg-white border border-gray-200 rounded-xl p-5 shadow-sm transition-all duration-300 " +
+										(isEditing
+											? "col-span-1 sm:col-span-2 lg:col-span-3 w-full"
+											: "hover:translate-x-2")
+									}
+									ref={isEditing ? editRef : null}
+								>
+									<div className="flex justify-between items-start">
+										<div className="w-full">
+											<div className="flex items-center mb-1">
+												<Users className="text-blue-500 mr-2" />
+												<h3 className="text-lg font-semibold text-gray-900">
+													{officer.name}
+												</h3>
+											</div>
+											<p className="text-sm text-blue-600 font-medium mb-1">
+												{officer.rank}
+											</p>
+											<p className="text-sm text-gray-500">
+												Início:{" "}
+												{new Date(officer.startDate).toLocaleDateString()}
+											</p>
+											{/* <p className="text-sm text-gray-500">
+                        Registro: {new Date(officer.registerDate).toLocaleString()}
+                      </p> */}
+										</div>
 
-							{!isEditing && (
-								<div className="absolute top-4 right-2 h-20 flex flex-col justify-between items-center opacity-0 group-hover:opacity-100 transition-all duration-200">
-									<button
-										className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition-colors"
-										onClick={() => setEditingId(officer._id)}
-									>
-										<Pencil size={18} />
-									</button>
-									<button
-										className="p-2 rounded-full bg-gray-100 hover:bg-red-100 text-red-600 hover:text-red-800 transition-colors"
-										onClick={() => handleDelete(officer._id)}
-									>
-										<Trash2 size={18} />
-									</button>
-								</div>
-							)}
-						</div>
+										{!isEditing && (
+											<div className="absolute top-4 right-2 h-20 flex flex-col justify-between items-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+												<button
+													className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition-colors"
+													onClick={() => setEditingId(officer._id)}
+												>
+													<Pencil size={18} />
+												</button>
+												<button
+													className="p-2 rounded-full bg-gray-100 hover:bg-red-100 text-red-600 hover:text-red-800 transition-colors"
+													onClick={() => handleDelete(officer._id)}
+												>
+													<Trash2 size={18} />
+												</button>
+											</div>
+										)}
+									</div>
 
-						{isEditing && (
-							<div className="mt-4 border-t pt-4 transition-all duration-300 ease-in-out">
-								<EditOfficerForm
-									officer={officer}
-									onCancel={stopEditing}
-									onSuccess={() => {
-										stopEditing();
-										fetchOfficers();
-									}}
-								/>
-							</div>
-						)}
+									{isEditing && (
+										<div className="mt-4 border-t pt-4 transition-all duration-300 ease-in-out">
+											<EditOfficerForm
+												officer={officer}
+												onCancel={stopEditing}
+												onSuccess={() => {
+													stopEditing();
+													fetchOfficers();
+												}}
+											/>
+										</div>
+									)}
+								</div>
+							);
+						})}
 					</div>
-				);
-			})}
+				</div>
+			))}
 		</div>
 	);
 }
