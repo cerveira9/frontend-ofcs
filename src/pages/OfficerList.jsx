@@ -27,6 +27,29 @@ export default function OfficerList() {
 		"Marshal",
 	];
 
+	const flagRules = {
+		Cadete: { green: 5, yellow: 7 },
+		"Patrol Officer": { green: 5, yellow: 7 },
+		"Police Officer": { green: 6, yellow: 8 },
+		"Senior Officer": { green: 7, yellow: 9 },
+		Deputy: { green: 10, yellow: 15 },
+		"Senior Deputy": { green: 15, yellow: 19 },
+	};
+
+	const getFlagColor = (rank, startDate) => {
+		if (!flagRules[rank]) return null;
+
+		const start = new Date(startDate);
+		const today = new Date();
+		const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+
+		const { green, yellow } = flagRules[rank];
+
+		if (diffDays <= green) return "green";
+		if (diffDays <= yellow) return "yellow";
+		return "red";
+	};
+
 	useEffect(() => {
 		fetchOfficers();
 	}, []);
@@ -90,6 +113,8 @@ export default function OfficerList() {
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 						{group.items.map((officer) => {
 							const isEditing = officer._id === editingId;
+							const flagColor = getFlagColor(officer.rank, officer.startDate);
+
 							return (
 								<div
 									key={officer._id}
@@ -101,6 +126,19 @@ export default function OfficerList() {
 									}
 									ref={isEditing ? editRef : null}
 								>
+									{flagColor && (
+										<div
+											className={`w-3 h-3 rounded-full absolute top-3 left-3 ${
+												flagColor === "green"
+													? "bg-green-500"
+													: flagColor === "yellow"
+													? "bg-yellow-400"
+													: "bg-red-500"
+											}`}
+											title={`Flag ${flagColor}`}
+										/>
+									)}
+
 									<div className="flex justify-between items-start">
 										<div className="w-full">
 											<div className="flex items-center mb-1">
@@ -109,16 +147,14 @@ export default function OfficerList() {
 													{officer.name}
 												</h3>
 											</div>
-											<p className="text-sm text-blue-600 font-medium mb-1">
-												{officer.rank}
-											</p>
 											<p className="text-sm text-gray-500">
 												Início:{" "}
 												{new Date(officer.startDate).toLocaleDateString()}
 											</p>
-											{/* <p className="text-sm text-gray-500">
-                        						Registro: {new Date(officer.registerDate).toLocaleString()}
-                      						</p> */}
+											<p className="text-sm text-gray-500">
+												Registro:{" "}
+												{new Date(officer.registerDate).toLocaleString()}
+											</p>
 										</div>
 
 										{!isEditing && (
