@@ -14,7 +14,7 @@ export default function UserRegister() {
 
 		try {
 			const token = localStorage.getItem("token");
-			axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+			api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
 			await api.post(
 				`${import.meta.env.VITE_API_BASE_URL}/auth/register`,
