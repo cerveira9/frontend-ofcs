@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Pencil, Trash2, Users } from 'lucide-react';
 import EditOfficerForm from './EditOfficerForm';
@@ -8,10 +8,29 @@ export default function OfficerList() {
   const [officers, setOfficers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
+  const editRef = useRef(null);
 
   useEffect(() => {
     fetchOfficers();
   }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (editRef.current && !editRef.current.contains(event.target)) {
+        setEditingId(null);
+      }
+    }
+
+    if (editingId) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [editingId]);
 
   const fetchOfficers = async () => {
     const res = await axios.get('http://localhost:5000/v1/api/officers/mostrarOficiais');
@@ -31,57 +50,66 @@ export default function OfficerList() {
   if (loading) return <div className="text-center text-gray-500">Carregando oficiais...</div>;
 
   return (
-    <div className="space-y-4">
-      {officers.map((officer) => (
-        <div
-          key={officer._id}
-          className="relative group bg-white border border-gray-200 rounded-xl p-5 shadow-sm transition-all duration-300 hover:translate-x-2 hover:shadow-lg"
-        >
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="flex items-center mb-1">
-                <Users className="text-blue-500 mr-2" />
-                <h3 className="text-lg font-semibold text-gray-900">{officer.name}</h3>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {officers.map((officer) => {
+        const isEditing = officer._id === editingId;
+        return (
+          <div
+            key={officer._id}
+            className={
+              `relative group bg-white border border-gray-200 rounded-xl p-5 shadow-sm transition-all duration-300 ` +
+              (isEditing ? 'col-span-1 sm:col-span-2 lg:col-span-3 w-full' : 'hover:translate-x-2')
+            }
+            ref={isEditing ? editRef : null}
+          >
+            <div className="flex justify-between items-start">
+              <div className="w-full">
+                <div className="flex items-center mb-1">
+                  <Users className="text-blue-500 mr-2" />
+                  <h3 className="text-lg font-semibold text-gray-900">{officer.name}</h3>
+                </div>
+                <p className="text-sm text-blue-600 font-medium mb-1">{officer.rank}</p>
+                <p className="text-sm text-gray-500">
+                  Início: {new Date(officer.startDate).toLocaleDateString()}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Registro: {new Date(officer.registerDate).toLocaleString()}
+                </p>
               </div>
-              <p className="text-sm text-blue-600 font-medium mb-1">{officer.rank}</p>
-              <p className="text-sm text-gray-500">
-                Início: {new Date(officer.startDate).toLocaleDateString()}
-              </p>
-              <p className="text-sm text-gray-500">
-                Registro: {new Date(officer.registerDate).toLocaleString()}
-              </p>
+
+              {!isEditing && (
+                <div className="absolute right-3 top-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <button
+                    className="text-blue-600 hover:text-blue-800"
+                    onClick={() => setEditingId(officer._id)}
+                  >
+                    <Pencil size={20} />
+                  </button>
+                  <button
+                    className="text-red-600 hover:text-red-800"
+                    onClick={() => handleDelete(officer._id)}
+                  >
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+              )}
             </div>
 
-            <div className="flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              <button
-                className="text-blue-600 hover:text-blue-800"
-                onClick={() => setEditingId(officer._id)}
-              >
-                <Pencil size={20} />
-              </button>
-              <button
-                className="text-red-600 hover:text-red-800"
-                onClick={() => handleDelete(officer._id)}
-              >
-                <Trash2 size={20} />
-              </button>
-            </div>
+            {isEditing && (
+              <div className="mt-4 border-t pt-4 transition-all duration-300 ease-in-out">
+                <EditOfficerForm
+                  officer={officer}
+                  onCancel={stopEditing}
+                  onSuccess={() => {
+                    stopEditing();
+                    fetchOfficers();
+                  }}
+                />
+              </div>
+            )}
           </div>
-
-          {editingId === officer._id && (
-            <div className="mt-4 border-t pt-4">
-              <EditOfficerForm
-                officer={officer}
-                onCancel={stopEditing}
-                onSuccess={() => {
-                  stopEditing();
-                  fetchOfficers();
-                }}
-              />
-            </div>
-          )}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
