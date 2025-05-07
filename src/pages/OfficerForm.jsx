@@ -2,21 +2,21 @@ import { useState } from "react";
 import axios from "axios";
 
 const ranks = [
-	'Cadete',
-	'Patrol Officer',
-	'Police Officer',
-	'Senior Officer',
-	'Deputy',
-	'Senior Deputy',
-	'Undersheriff / Deputy Chief',
-	'Sheriff / Chief of Police',
-	'Forest Ranger',
-	'Tracker Ranger',
-	'Senior Ranger',
-	'Captain Ranger',
-	'Commissioner',
-	'Deputy Marshal',
-	'Marshal',
+	"Cadete",
+	"Patrol Officer",
+	"Police Officer",
+	"Senior Officer",
+	"Deputy",
+	"Senior Deputy",
+	"Undersheriff / Deputy Chief",
+	"Sheriff / Chief of Police",
+	"Forest Ranger",
+	"Tracker Ranger",
+	"Senior Ranger",
+	"Captain Ranger",
+	"Commissioner",
+	"Deputy Marshal",
+	"Marshal",
 ];
 
 export default function OfficerForm() {
@@ -26,11 +26,17 @@ export default function OfficerForm() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		// Ajuste de fuso horário manual
+		const [year, month, day] = startDate.split("-");
+		const correctedDate = new Date(year, month - 1, day); // Cria como local sem UTC
+
 		await axios.post("http://localhost:5000/v1/api/officers/cadastroOficial", {
 			name,
 			rank,
-			startDate,
+			startDate: correctedDate.toISOString(), // mantém hora 00:00Z, sem perder o dia
 		});
+
 		setName("");
 		setRank(ranks[0]);
 		setStartDate("");
