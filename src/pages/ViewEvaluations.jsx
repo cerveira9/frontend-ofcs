@@ -7,7 +7,7 @@ export default function ViewEvaluations({ officerId }) {
 
 	useEffect(() => {
 		axios
-			.get(`http://localhost:5000/v1/api/evaluations/${officerId}`)
+			.get(`${import.meta.env.VITE_API_BASE_URL}/evaluations/${officerId}`)
 			.then((res) => setEvaluations(res.data));
 	}, [officerId]);
 
