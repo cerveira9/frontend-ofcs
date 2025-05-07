@@ -17,7 +17,7 @@ export default function UserRegister() {
 			axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
 			await axios.post(
-				"http://localhost:5000/v1/api/auth/register",
+				`${import.meta.env.VITE_API_BASE_URL}/auth/register`,
 				{ username, password, officerName, role },
 				{
 					headers: {
