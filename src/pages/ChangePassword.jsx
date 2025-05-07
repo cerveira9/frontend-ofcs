@@ -26,7 +26,7 @@ export default function ChangePassword() {
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/alterarSenha`, {
+      await api.post('/auth/alterarSenha', {
         currentPassword,
         newPassword,
       });
