@@ -29,11 +29,11 @@ export default function OfficerList() {
 
 	const flagRules = {
 		Cadete: { green: 5, yellow: 7 },
-		"Patrol Officer": { green: 5, yellow: 7 },
-		"Police Officer": { green: 6, yellow: 8 },
-		"Senior Officer": { green: 7, yellow: 9 },
-		Deputy: { green: 10, yellow: 15 },
-		"Senior Deputy": { green: 15, yellow: 19 },
+		// "Patrol Officer": { green: 5, yellow: 7 },
+		// "Police Officer": { green: 6, yellow: 8 },
+		// "Senior Officer": { green: 7, yellow: 9 },
+		// Deputy: { green: 10, yellow: 15 },
+		// "Senior Deputy": { green: 15, yellow: 19 },
 	};
 
 	const getFlagColor = (rank, startDate) => {
@@ -108,8 +108,9 @@ export default function OfficerList() {
 			{grouped.map((group) => (
 				<div key={group.rank}>
 					<h2 className="text-xl font-bold text-gray-700 border-b border-gray-300 mb-4">
-						{group.rank}
+						{group.rank} ({group.items.length})
 					</h2>
+
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 						{group.items.map((officer) => {
 							const isEditing = officer._id === editingId;
