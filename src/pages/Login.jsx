@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Lock, User } from 'lucide-react';
 
 export default function Login({ onLoginSuccess }) {
@@ -12,7 +12,7 @@ export default function Login({ onLoginSuccess }) {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/v1/api/auth/login', {
+      const res = await api.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
         username,
         password,
       });

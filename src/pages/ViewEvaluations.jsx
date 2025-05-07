@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from '../api';
 
 export default function ViewEvaluations({ officerId }) {
 	const [evaluations, setEvaluations] = useState([]);
 	const [openIndex, setOpenIndex] = useState(null);
 
 	useEffect(() => {
-		axios
-			.get(`http://localhost:5000/v1/api/evaluations/${officerId}`)
+		api
+			.get(`${import.meta.env.VITE_API_BASE_URL}/evaluations/${officerId}`)
 			.then((res) => setEvaluations(res.data));
 	}, [officerId]);
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from '../api';
 
 export default function UserRegister() {
 	const [username, setUsername] = useState("");
@@ -16,8 +16,8 @@ export default function UserRegister() {
 			const token = localStorage.getItem("token");
 			axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-			await axios.post(
-				"http://localhost:5000/v1/api/auth/register",
+			await api.post(
+				`${import.meta.env.VITE_API_BASE_URL}/auth/register`,
 				{ username, password, officerName, role },
 				{
 					headers: {

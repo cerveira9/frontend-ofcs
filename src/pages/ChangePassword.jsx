@@ -26,7 +26,7 @@ export default function ChangePassword() {
     }
 
     try {
-      await axios.post('http://localhost:5000/v1/api/auth/alterarSenha', {
+      await api.post('/auth/alterarSenha', {
         currentPassword,
         newPassword,
       });

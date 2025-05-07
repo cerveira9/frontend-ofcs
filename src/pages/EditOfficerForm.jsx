@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from '../api';
 
 const ranks = [
 	"Cadete",
@@ -43,8 +43,8 @@ export default function EditOfficerForm({ officer, onCancel, onSuccess }) {
 			startDate: correctedDate.toISOString(),
 		};
 
-		await axios.put(
-			`http://localhost:5000/v1/api/officers/atualizarOficial/${officer._id}`,
+		await api.put(
+			`/officers/atualizarOficial/${officer._id}`,
 			dataToSend
 		);
 		onSuccess();

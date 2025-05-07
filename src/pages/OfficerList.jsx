@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Pencil, Trash2, FileSearch } from 'lucide-react';
 import EditOfficerForm from './EditOfficerForm';
 import ViewEvaluations from './ViewEvaluations';
@@ -51,14 +51,14 @@ export default function OfficerList() {
   }, [editingId, viewingEvalId]);
 
   const fetchOfficers = async () => {
-    const res = await axios.get('http://localhost:5000/v1/api/officers/mostrarOficiais');
+    const res = await api.get(`${import.meta.env.VITE_API_BASE_URL}/officers/mostrarOficiais`);
     setOfficers(res.data);
     setLoading(false);
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Você confirma a exclusão do oficial?")) return;
-    await axios.delete(`http://localhost:5000/v1/api/officers/deletarOficial/${id}`);
+    await api.delete(`${import.meta.env.VITE_API_BASE_URL}/officers/deletarOficial/${id}`);
     fetchOfficers();
   };
 

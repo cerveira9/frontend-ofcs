@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { CheckCircle, AlertTriangle } from 'lucide-react';
 
 export default function EvaluationForm() {
@@ -31,7 +31,7 @@ export default function EvaluationForm() {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:5000/v1/api/officers/mostrarOficiais')
+    api.get(`${import.meta.env.VITE_API_BASE_URL}/officers/mostrarOficiais`)
       .then(res => setOfficers(res.data))
       .catch(() => setError('Erro ao carregar oficiais.'));
   }, []);
@@ -57,7 +57,7 @@ export default function EvaluationForm() {
     }
 
     try {
-      await axios.post('http://localhost:5000/v1/api/evaluations/cadastrarAvaliacao', {
+      await api.post(`${import.meta.env.VITE_API_BASE_URL}/evaluations/cadastrarAvaliacao`, {
         officerId: selected,
         skills: convertedSkills
       });
