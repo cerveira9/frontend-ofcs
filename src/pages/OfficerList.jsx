@@ -117,8 +117,8 @@ export default function OfficerList() {
 												{new Date(officer.startDate).toLocaleDateString()}
 											</p>
 											{/* <p className="text-sm text-gray-500">
-                        Registro: {new Date(officer.registerDate).toLocaleString()}
-                      </p> */}
+                        						Registro: {new Date(officer.registerDate).toLocaleString()}
+                      						</p> */}
 										</div>
 
 										{!isEditing && (
