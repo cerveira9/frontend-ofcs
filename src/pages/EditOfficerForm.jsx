@@ -44,7 +44,7 @@ export default function EditOfficerForm({ officer, onCancel, onSuccess }) {
 		};
 
 		await axios.put(
-			`http://localhost:5000/v1/api/officers/atualizarOficial/${officer._id}`,
+			`${import.meta.env.VITE_API_BASE_URL}/officers/atualizarOficial/${officer._id}`,
 			dataToSend
 		);
 		onSuccess();

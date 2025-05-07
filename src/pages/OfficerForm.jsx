@@ -31,7 +31,7 @@ export default function OfficerForm() {
 		const [year, month, day] = startDate.split("-");
 		const correctedDate = new Date(year, month - 1, day); // Cria como local sem UTC
 
-		await axios.post("http://localhost:5000/v1/api/officers/cadastroOficial", {
+		await axios.post(`${import.meta.env.VITE_API_BASE_URL}/officers/cadastroOficial`, {
 			name,
 			rank,
 			startDate: correctedDate.toISOString(), // mantém hora 00:00Z, sem perder o dia

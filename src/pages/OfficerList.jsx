@@ -51,14 +51,14 @@ export default function OfficerList() {
   }, [editingId, viewingEvalId]);
 
   const fetchOfficers = async () => {
-    const res = await axios.get('http://localhost:5000/v1/api/officers/mostrarOficiais');
+    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/officers/mostrarOficiais`);
     setOfficers(res.data);
     setLoading(false);
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Você confirma a exclusão do oficial?")) return;
-    await axios.delete(`http://localhost:5000/v1/api/officers/deletarOficial/${id}`);
+    await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/officers/deletarOficial/${id}`);
     fetchOfficers();
   };
 
