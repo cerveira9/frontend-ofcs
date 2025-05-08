@@ -63,6 +63,11 @@ export default function EvaluationForm() {
 				{
 					officerId: selected,
 					skills: convertedSkills,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
 				}
 			);
 			setSuccess(true);
