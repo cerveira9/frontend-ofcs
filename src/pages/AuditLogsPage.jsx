@@ -44,7 +44,6 @@ export default function AuditLogsPage() {
 		const fetchLogs = async () => {
 			try {
 				const params = { page, limit: 10, ...filters, search };
-				console.log("🔎 Buscando logs com params:", params); // DEBUG
 				const res = await api.get(
 					`${import.meta.env.VITE_API_BASE_URL}/audit/audit-logs`,
 					{ params }
@@ -76,7 +75,6 @@ export default function AuditLogsPage() {
 				setLogs(logsWithNames);
 				setTotalPages(res.data.totalPages || 1);
 			} catch (error) {
-				console.error("❌ Erro ao buscar logs:", error.message);
 				setLogs([]);
 			}
 		};
