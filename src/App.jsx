@@ -7,6 +7,7 @@ import OfficerList from "./pages/OfficerList";
 import Login from "./pages/Login";
 import UserRegister from "./pages/UserRegister";
 import ChangePassword from "./pages/ChangePassword";
+import Dashboard from "./pages/Dashboard";
 
 export default function App() {
 	const [activeTab, setActiveTab] = useState("cadastro");
@@ -106,6 +107,19 @@ export default function App() {
 						</button>
 					)}
 
+					{userRole === "admin" && (
+						<button
+							className={`px-5 py-2 rounded-lg font-medium shadow transition ${
+								activeTab === "dashboard"
+									? "bg-blue-600 text-white"
+									: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+							}`}
+							onClick={() => setActiveTab("dashboard")}
+						>
+							Dashboard
+						</button>
+					)}
+
 					{isAuthenticated && (
 						<button
 							className={`px-5 py-2 rounded-lg font-medium shadow transition ${
@@ -131,6 +145,7 @@ export default function App() {
 				{activeTab === "avaliacao" && <EvaluationForm />}
 				{activeTab === "lista" && <OfficerList />}
 				{activeTab === "usuarios" && userRole === "admin" && <UserRegister />}
+				{activeTab === "dashboard" && <Dashboard />}
 				{activeTab === "senha" && <ChangePassword />}
 			</div>
 		</div>
