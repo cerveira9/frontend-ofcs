@@ -96,19 +96,6 @@ export default function App() {
 					</button>
 
 					{userRole === "admin" && (
-						<button
-							className={`px-5 py-2 rounded-lg font-medium shadow transition ${
-								activeTab === "usuarios"
-									? "bg-blue-600 text-white"
-									: "bg-gray-100 text-gray-700 hover:bg-gray-200"
-							}`}
-							onClick={() => setActiveTab("usuarios")}
-						>
-							Cadastro de Usuários
-						</button>
-					)}
-
-					{userRole === "admin" && (
 						<>
 							<button
 								className={`px-5 py-2 rounded-lg font-medium shadow transition ${
