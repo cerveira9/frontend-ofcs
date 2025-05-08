@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from '../api';
+import api from "../api";
 
 export default function ViewEvaluations({ officerId }) {
 	const [evaluations, setEvaluations] = useState([]);
@@ -42,7 +42,9 @@ export default function ViewEvaluations({ officerId }) {
 						className="cursor-pointer text-blue-600 font-semibold hover:underline"
 						onClick={() => toggleIndex(idx)}
 					>
-						Avaliação na data: {new Date(evalItem.date).toLocaleDateString()}
+						Data: {new Date(evalItem.date).toLocaleDateString()} | Patente:{" "}
+						{evalItem.rankAtEvaluation || "N/A"} | Avaliador:{" "}
+						{evalItem.evaluator?.officerName || "Desconhecido"}
 					</div>
 
 					{openIndex === idx && (
