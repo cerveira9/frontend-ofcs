@@ -21,9 +21,35 @@ export default function App() {
 		if (token) {
 			try {
 				const decoded = jwtDecode(token);
+				const now = Date.now();
+				const expiration = decoded.exp * 1000;
+
+				if (expiration <= now) {
+					handleLogout(); // Token já expirado
+					alert("Sua sessão expirou. Faça login novamente.");
+					return;
+				}
+
 				setIsAuthenticated(true);
 				setUserRole(decoded.role);
 				axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+				const timeoutWarning = expiration - now - 30000;
+				const timeoutLogout = expiration - now;
+
+				const warningTimer = setTimeout(() => {
+					alert("Sua sessão está prestes a expirar. Você será deslogado.");
+				}, Math.max(timeoutWarning, 0)); // Evita valores negativos
+
+				const logoutTimer = setTimeout(() => {
+					alert("Sua sessão expirou. Faça login novamente.");
+					handleLogout();
+				}, timeoutLogout);
+
+				return () => {
+					clearTimeout(warningTimer);
+					clearTimeout(logoutTimer);
+				};
 			} catch (error) {
 				console.error("Token inválido:", error);
 				localStorage.removeItem("token");
