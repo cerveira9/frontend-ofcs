@@ -9,6 +9,8 @@ import UserRegister from "./pages/UserRegister";
 import ChangePassword from "./pages/ChangePassword";
 import Dashboard from "./pages/Dashboard";
 import AuditLogsPage from "./pages/AuditLogsPage";
+import Sidemenu from "./components/Sidemenu";
+import Header from "./components/Header";
 
 export default function App() {
 	const [activeTab, setActiveTab] = useState("cadastro");
@@ -95,55 +97,17 @@ export default function App() {
 	}
 
 	return (
-		<div className="min-h-screen px-4 py-10 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-			<div className="max-w-4xl mx-auto">
-				<div className="flex justify-between items-center mb-8">
-					<h1 className="text-3xl font-bold text-center w-full">
-						Sistema de Avaliação de Oficiais
-					</h1>
-					<button
-						onClick={toggleTheme}
-						className="absolute top-6 right-6 px-3 py-1 text-sm rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:opacity-90 transition"
-					>
-						{theme === "light" ? "🌙 Modo Escuro" : "☀️ Modo Claro"}
-					</button>
-				</div>
+		<div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+			<Header theme={theme} toggleTheme={toggleTheme} userRole={userRole} />
 
-				<div className="flex justify-center gap-4 mb-8 flex-wrap">
-					{[
-						{ key: "cadastro", label: "Cadastro de Oficial" },
-						{ key: "avaliacao", label: "Avaliação de Oficial" },
-						{ key: "lista", label: "Lista de Oficiais" },
-						...(userRole === "admin"
-							? [
-									{ key: "usuarios", label: "Cadastro de Usuários" },
-									{ key: "dashboard", label: "Dashboard" },
-									{ key: "logs", label: "Logs de Auditoria" },
-							  ]
-							: []),
-						{ key: "senha", label: "Alterar Senha" },
-					].map(({ key, label }) => (
-						<button
-							key={key}
-							className={`px-5 py-2 rounded-lg font-medium shadow transition ${
-								activeTab === key
-									? "bg-blue-600 text-white"
-									: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
-							}`}
-							onClick={() => setActiveTab(key)}
-						>
-							{label}
-						</button>
-					))}
+			<Sidemenu
+				activeTab={activeTab}
+				setActiveTab={setActiveTab}
+				handleLogout={handleLogout}
+				userRole={userRole}
+			/>
 
-					<button
-						className="px-5 py-2 rounded-lg font-medium shadow transition bg-red-100 dark:bg-red-800 text-red-600 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-700"
-						onClick={handleLogout}
-					>
-						Logout
-					</button>
-				</div>
-
+			<div className={`p-8 ${window.innerWidth >= 768 ? "ml-64" : ""} pt-24`}>
 				{activeTab === "cadastro" && <OfficerForm />}
 				{activeTab === "avaliacao" && <EvaluationForm />}
 				{activeTab === "lista" && <OfficerList userRole={userRole} />}
