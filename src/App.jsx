@@ -146,7 +146,7 @@ export default function App() {
 
 				{activeTab === "cadastro" && <OfficerForm />}
 				{activeTab === "avaliacao" && <EvaluationForm />}
-				{activeTab === "lista" && <OfficerList />}
+				{activeTab === "lista" && <OfficerList userRole={userRole} />}
 				{activeTab === "usuarios" && userRole === "admin" && <UserRegister />}
 				{activeTab === "dashboard" && userRole === "admin" && <Dashboard />}
 				{activeTab === "logs" && userRole === "admin" && <AuditLogsPage />}

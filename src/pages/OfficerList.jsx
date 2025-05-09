@@ -4,7 +4,7 @@ import { Pencil, Trash2, FileSearch, ArrowUp } from "lucide-react";
 import EditOfficerForm from "./EditOfficerForm";
 import ViewEvaluations from "./ViewEvaluations";
 
-export default function OfficerList() {
+export default function OfficerList({ userRole }) {
 	const [officers, setOfficers] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [editingId, setEditingId] = useState(null);
@@ -167,7 +167,9 @@ export default function OfficerList() {
 
 														try {
 															await api.put(
-																`${import.meta.env.VITE_API_BASE_URL}/officers/promoverOficial/${officer._id}`
+																`${
+																	import.meta.env.VITE_API_BASE_URL
+																}/officers/promoverOficial/${officer._id}`
 															);
 															fetchOfficers();
 														} catch {
@@ -227,7 +229,10 @@ export default function OfficerList() {
 
 									{isViewing && (
 										<div className="mt-4 border-t border-gray-200 dark:border-gray-600 pt-4">
-											<ViewEvaluations officerId={officer._id} />
+											<ViewEvaluations
+												officerId={officer._id}
+												userRole={userRole || "federal"}
+											/>
 										</div>
 									)}
 								</div>
