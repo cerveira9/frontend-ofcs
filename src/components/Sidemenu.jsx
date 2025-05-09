@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { LogOut, Menu, X } from "lucide-react";
 
-export default function Sidemenu({ activeTab, setActiveTab, handleLogout, userRole }) {
+export default function Sidemenu({ activeTab, setActiveTab, handleLogout, userRole, setMenuOpen }) {
     const [isOpen, setIsOpen] = useState(false);
 
     const menuItems = [
@@ -18,13 +18,18 @@ export default function Sidemenu({ activeTab, setActiveTab, handleLogout, userRo
         { key: "senha", label: "Alterar Senha" },
     ];
 
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
+        setMenuOpen(!isOpen);
+    };
+
     return (
         <div className="relative">
-            {/* Overlay (aparece em telas menores quando o menu está aberto) */}
+            {/* Overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                    onClick={() => setIsOpen(false)} // Fecha o menu ao clicar fora
+                    className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+                    onClick={toggleMenu}
                 ></div>
             )}
 
@@ -39,7 +44,7 @@ export default function Sidemenu({ activeTab, setActiveTab, handleLogout, userRo
                         Menu
                     </h2>
                     <button
-                        onClick={() => setIsOpen(false)}
+                        onClick={toggleMenu}
                         className="text-gray-800 dark:text-gray-100 hover:opacity-75"
                     >
                         <X size={24} />
@@ -70,9 +75,9 @@ export default function Sidemenu({ activeTab, setActiveTab, handleLogout, userRo
             </div>
 
             {/* Toggle Button */}
-            {!isOpen && ( // Oculta o botão de menu quando o menu está expandido
+            {!isOpen && (
                 <button
-                    onClick={() => setIsOpen(true)}
+                    onClick={toggleMenu}
                     className="fixed top-4 left-4 z-50 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 p-2 rounded-full shadow-lg hover:opacity-90"
                 >
                     <Menu size={24} />

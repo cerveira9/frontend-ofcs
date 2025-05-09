@@ -14,9 +14,10 @@ import Header from "./components/Header";
 
 export default function App() {
 	const [activeTab, setActiveTab] = useState("cadastro");
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
-	const [userRole, setUserRole] = useState(null);
-	const [theme, setTheme] = useState("light");
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userRole, setUserRole] = useState(null);
+    const [theme, setTheme] = useState("light");
+    const [isMenuOpen, setMenuOpen] = useState(false);
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
@@ -60,17 +61,17 @@ export default function App() {
 	}, []);
 
 	useEffect(() => {
-		const savedTheme = localStorage.getItem("theme") || "light";
-		setTheme(savedTheme);
-		document.documentElement.classList.toggle("dark", savedTheme === "dark");
-	}, []);
+        const savedTheme = localStorage.getItem("theme") || "light";
+        setTheme(savedTheme);
+        document.documentElement.classList.toggle("dark", savedTheme === "dark");
+    }, []);
 
 	const toggleTheme = () => {
-		const newTheme = theme === "light" ? "dark" : "light";
-		setTheme(newTheme);
-		localStorage.setItem("theme", newTheme);
-		document.documentElement.classList.toggle("dark", newTheme === "dark");
-	};
+        const newTheme = theme === "light" ? "dark" : "light";
+        setTheme(newTheme);
+        localStorage.setItem("theme", newTheme);
+        document.documentElement.classList.toggle("dark", newTheme === "dark");
+    };
 
 	const handleLoginSuccess = (token) => {
 		localStorage.setItem("token", token);
@@ -89,12 +90,12 @@ export default function App() {
 	};
 
 	if (!isAuthenticated) {
-		return (
-			<div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center text-gray-900 dark:text-gray-100">
-				<Login onLoginSuccess={handleLoginSuccess} />
-			</div>
-		);
-	}
+        return (
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center text-gray-900 dark:text-gray-100">
+                <Login onLoginSuccess={handleLoginSuccess} />
+            </div>
+        );
+    }
 
 	return (
 		<div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -105,9 +106,14 @@ export default function App() {
 				setActiveTab={setActiveTab}
 				handleLogout={handleLogout}
 				userRole={userRole}
+				setMenuOpen={setMenuOpen}
 			/>
 
-			<div className={`p-8 ${window.innerWidth >= 768 ? "ml-64" : ""} pt-24`}>
+			<div
+				className={`p-8 transition-all duration-300 ${
+					isMenuOpen ? "ml-64" : "ml-0"
+				} pt-24`}
+			>
 				{activeTab === "cadastro" && <OfficerForm />}
 				{activeTab === "avaliacao" && <EvaluationForm />}
 				{activeTab === "lista" && <OfficerList userRole={userRole} />}
