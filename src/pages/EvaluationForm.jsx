@@ -37,9 +37,13 @@ export default function EvaluationForm() {
 	}, []);
 
 	const handleChange = (skill, value) => {
-		const val = parseInt(value);
-		if (val >= 0 && val <= 10) {
-			setSkills((prev) => ({ ...prev, [skill]: val }));
+		const formattedValue = value.replace(",", ".");
+
+		const val = parseFloat(formattedValue);
+		if (!isNaN(val) && val >= 0 && val <= 10) {
+			setSkills((prev) => ({ ...prev, [skill]: formattedValue }));
+		} else if (value === "") {
+			setSkills((prev) => ({ ...prev, [skill]: "" }));
 		}
 	};
 
@@ -53,7 +57,7 @@ export default function EvaluationForm() {
 		const convertedSkills = {};
 		for (const [label, value] of Object.entries(skills)) {
 			const key = labelToKey[label];
-			if (key) convertedSkills[key] = value;
+			if (key) convertedSkills[key] = parseFloat(value);
 		}
 
 		try {
@@ -137,13 +141,11 @@ export default function EvaluationForm() {
 							{skill}
 						</label>
 						<input
-							type="number"
-							min="0"
-							max="10"
+							type="text"
 							value={skills[skill] ?? ""}
 							onChange={(e) => handleChange(skill, e.target.value)}
 							className="px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-							placeholder="Nota de 0 a 10"
+							placeholder="Nota de 0 a 10 (ex.: 9,5)"
 						/>
 					</div>
 				))}
@@ -151,13 +153,15 @@ export default function EvaluationForm() {
 
 			{error && (
 				<div className="mt-4 flex items-center text-sm text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-800/20 p-3 rounded-md">
-					<AlertTriangle className="w-5 h-5 mr-2" /> {error}
+					<AlertTriangle className="w-5 h-5 mr-2" />
+					{error}
 				</div>
 			)}
 
 			{success && (
 				<div className="mt-4 flex items-center text-sm text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-800/20 p-3 rounded-md">
-					<CheckCircle className="w-5 h-5 mr-2" /> Avaliação salva com sucesso!
+					<CheckCircle className="w-5 h-5 mr-2" />
+					Avaliação salva com sucesso!
 				</div>
 			)}
 
