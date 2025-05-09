@@ -14,6 +14,7 @@ export default function App() {
 	const [activeTab, setActiveTab] = useState("cadastro");
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [userRole, setUserRole] = useState(null);
+	const [theme, setTheme] = useState("light");
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
@@ -29,6 +30,19 @@ export default function App() {
 			}
 		}
 	}, []);
+
+	useEffect(() => {
+		const savedTheme = localStorage.getItem("theme") || "light";
+		setTheme(savedTheme);
+		document.documentElement.classList.toggle("dark", savedTheme === "dark");
+	}, []);
+
+	const toggleTheme = () => {
+		const newTheme = theme === "light" ? "dark" : "light";
+		setTheme(newTheme);
+		localStorage.setItem("theme", newTheme);
+		document.documentElement.classList.toggle("dark", newTheme === "dark");
+	};
 
 	const handleLoginSuccess = (token) => {
 		localStorage.setItem("token", token);
@@ -48,105 +62,56 @@ export default function App() {
 
 	if (!isAuthenticated) {
 		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+			<div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center text-gray-900 dark:text-gray-100">
 				<Login onLoginSuccess={handleLoginSuccess} />
 			</div>
 		);
 	}
 
 	return (
-		<div className="min-h-screen bg-white px-4 py-10">
+		<div className="min-h-screen px-4 py-10 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
 			<div className="max-w-4xl mx-auto">
-				<h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-					Sistema de Avaliação de Oficiais
-				</h1>
+				<div className="flex justify-between items-center mb-8">
+					<h1 className="text-3xl font-bold text-center w-full">
+						Sistema de Avaliação de Oficiais
+					</h1>
+					<button
+						onClick={toggleTheme}
+						className="absolute top-6 right-6 px-3 py-1 text-sm rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:opacity-90 transition"
+					>
+						{theme === "light" ? "🌙 Modo Escuro" : "☀️ Modo Claro"}
+					</button>
+				</div>
 
 				<div className="flex justify-center gap-4 mb-8 flex-wrap">
-					<button
-						className={`px-5 py-2 rounded-lg font-medium shadow transition ${
-							activeTab === "cadastro"
-								? "bg-blue-600 text-white"
-								: "bg-gray-100 text-gray-700 hover:bg-gray-200"
-						}`}
-						onClick={() => setActiveTab("cadastro")}
-					>
-						Cadastro de Oficial
-					</button>
-
-					<button
-						className={`px-5 py-2 rounded-lg font-medium shadow transition ${
-							activeTab === "avaliacao"
-								? "bg-blue-600 text-white"
-								: "bg-gray-100 text-gray-700 hover:bg-gray-200"
-						}`}
-						onClick={() => setActiveTab("avaliacao")}
-					>
-						Avaliação de Oficial
-					</button>
-
-					<button
-						className={`px-5 py-2 rounded-lg font-medium shadow transition ${
-							activeTab === "lista"
-								? "bg-blue-600 text-white"
-								: "bg-gray-100 text-gray-700 hover:bg-gray-200"
-						}`}
-						onClick={() => setActiveTab("lista")}
-					>
-						Lista de Oficiais
-					</button>
-
-					{userRole === "admin" && (
-						<>
-							<button
-								className={`px-5 py-2 rounded-lg font-medium shadow transition ${
-									activeTab === "usuarios"
-										? "bg-blue-600 text-white"
-										: "bg-gray-100 text-gray-700 hover:bg-gray-200"
-								}`}
-								onClick={() => setActiveTab("usuarios")}
-							>
-								Cadastro de Usuários
-							</button>
-
-							<button
-								className={`px-5 py-2 rounded-lg font-medium shadow transition ${
-									activeTab === "dashboard"
-										? "bg-blue-600 text-white"
-										: "bg-gray-100 text-gray-700 hover:bg-gray-200"
-								}`}
-								onClick={() => setActiveTab("dashboard")}
-							>
-								Dashboard
-							</button>
-
-							<button
-								className={`px-5 py-2 rounded-lg font-medium shadow transition ${
-									activeTab === "logs"
-										? "bg-blue-600 text-white"
-										: "bg-gray-100 text-gray-700 hover:bg-gray-200"
-								}`}
-								onClick={() => setActiveTab("logs")}
-							>
-								Logs de Auditoria
-							</button>
-						</>
-					)}
-
-					{isAuthenticated && (
+					{[
+						{ key: "cadastro", label: "Cadastro de Oficial" },
+						{ key: "avaliacao", label: "Avaliação de Oficial" },
+						{ key: "lista", label: "Lista de Oficiais" },
+						...(userRole === "admin"
+							? [
+									{ key: "usuarios", label: "Cadastro de Usuários" },
+									{ key: "dashboard", label: "Dashboard" },
+									{ key: "logs", label: "Logs de Auditoria" },
+							  ]
+							: []),
+						{ key: "senha", label: "Alterar Senha" },
+					].map(({ key, label }) => (
 						<button
+							key={key}
 							className={`px-5 py-2 rounded-lg font-medium shadow transition ${
-								activeTab === "senha"
+								activeTab === key
 									? "bg-blue-600 text-white"
-									: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+									: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
 							}`}
-							onClick={() => setActiveTab("senha")}
+							onClick={() => setActiveTab(key)}
 						>
-							Alterar Senha
+							{label}
 						</button>
-					)}
+					))}
 
 					<button
-						className="px-5 py-2 rounded-lg font-medium shadow transition bg-red-100 text-red-600 hover:bg-red-200"
+						className="px-5 py-2 rounded-lg font-medium shadow transition bg-red-100 dark:bg-red-800 text-red-600 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-700"
 						onClick={handleLogout}
 					>
 						Logout
