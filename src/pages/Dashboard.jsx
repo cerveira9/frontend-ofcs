@@ -83,10 +83,9 @@ export default function Dashboard() {
 	};
 
 	if (!data)
-		return <div className="text-center text-gray-500">Carregando dados...</div>;
+		return <div className="text-center text-gray-500 dark:text-gray-300">Carregando dados...</div>;
 
 	const skills = Object.entries(skillLabels);
-
 	const currentSet =
 		officerId && selectedPatent
 			? data.averageSkills[selectedPatent]
@@ -101,10 +100,10 @@ export default function Dashboard() {
 	const min = Math.min(...values);
 
 	const barColors = values.map((val) => {
-		if (val === min) return "rgba(239, 68, 68, 0.8)"; // vermelho
-		if (val === max && val >= 7) return "rgba(34, 197, 94, 0.8)"; // verde
-		if (val < 7) return "rgba(234, 179, 8, 0.8)"; // amarelo
-		return "rgba(59, 130, 246, 0.8)"; // azul padrão
+		if (val === min) return "rgba(239, 68, 68, 0.8)";
+		if (val === max && val >= 7) return "rgba(34, 197, 94, 0.8)";
+		if (val < 7) return "rgba(234, 179, 8, 0.8)";
+		return "rgba(59, 130, 246, 0.8)";
 	});
 
 	const hierarchy = [
@@ -134,37 +133,35 @@ export default function Dashboard() {
 
 	return (
 		<div className="max-w-5xl mx-auto p-6 space-y-8">
-			<h1 className="text-3xl font-bold text-center text-gray-800">
+			<h1 className="text-3xl font-bold text-center text-gray-800 dark:text-white">
 				Dashboard de Desempenho
 			</h1>
 
-			{/* Cards */}
 			<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-				<div className="bg-blue-100 p-6 rounded-lg shadow text-center">
-					<h2 className="text-gray-700 font-medium">Total de Oficiais</h2>
-					<p className="text-3xl font-bold text-blue-900">
+				<div className="bg-blue-100 dark:bg-blue-900 p-6 rounded-lg shadow text-center">
+					<h2 className="text-gray-700 dark:text-gray-100 font-medium">Total de Oficiais</h2>
+					<p className="text-3xl font-bold text-blue-900 dark:text-blue-200">
 						{data.totalOfficers}
 					</p>
 				</div>
-				<div className="bg-green-100 p-6 rounded-lg shadow text-center">
-					<h2 className="text-gray-700 font-medium">Avaliações Realizadas</h2>
-					<p className="text-3xl font-bold text-green-900">
+				<div className="bg-green-100 dark:bg-green-900 p-6 rounded-lg shadow text-center">
+					<h2 className="text-gray-700 dark:text-gray-100 font-medium">Avaliações Realizadas</h2>
+					<p className="text-3xl font-bold text-green-900 dark:text-green-200">
 						{data.totalEvaluations}
 					</p>
 				</div>
-				<div className="bg-purple-100 p-6 rounded-lg shadow text-center">
-					<h2 className="text-gray-700 font-medium">Oficiais Avaliados</h2>
-					<p className="text-3xl font-bold text-purple-900">
+				<div className="bg-purple-100 dark:bg-purple-900 p-6 rounded-lg shadow text-center">
+					<h2 className="text-gray-700 dark:text-gray-100 font-medium">Oficiais Avaliados</h2>
+					<p className="text-3xl font-bold text-purple-900 dark:text-purple-200">
 						{data.evaluatedOfficers}
 					</p>
 				</div>
 			</div>
 
-			{/* Filtro de Oficial */}
-			<div className="bg-white p-4 rounded shadow space-y-4">
+			<div className="bg-white dark:bg-gray-800 p-4 rounded shadow space-y-4">
 				<div className="flex flex-col sm:flex-row items-center justify-between gap-4">
 					<select
-						className="border px-4 py-2 rounded w-full sm:w-auto"
+						className="border dark:border-gray-600 dark:bg-gray-900 dark:text-white px-4 py-2 rounded w-full sm:w-auto"
 						value={officerId}
 						onChange={(e) => fetchOfficerStats(e.target.value)}
 					>
@@ -183,7 +180,7 @@ export default function Dashboard() {
 					{officerId && (
 						<button
 							onClick={fetchAnalytics}
-							className="bg-red-100 text-red-700 px-4 py-2 rounded hover:bg-red-200 transition"
+							className="bg-red-100 dark:bg-red-800 text-red-700 dark:text-white px-4 py-2 rounded hover:bg-red-200 dark:hover:bg-red-700 transition"
 						>
 							Voltar para Média Geral
 						</button>
@@ -192,11 +189,11 @@ export default function Dashboard() {
 
 				{officerId && patents.length > 1 && (
 					<div className="flex flex-wrap items-center gap-4 mt-2">
-						<label className="text-sm text-gray-700 font-medium">
+						<label className="text-sm text-gray-700 dark:text-gray-300 font-medium">
 							Selecionar Patente:
 						</label>
 						{patents.map((rank) => (
-							<label key={rank} className="flex items-center gap-2 text-sm">
+							<label key={rank} className="flex items-center gap-2 text-sm dark:text-white">
 								<input
 									type="radio"
 									name="rankFilter"
@@ -209,7 +206,7 @@ export default function Dashboard() {
 									`(${data.evaluationsByRank[rank]})`}
 							</label>
 						))}
-						<label className="flex items-center gap-2 text-sm font-medium">
+						<label className="flex items-center gap-2 text-sm font-medium dark:text-white">
 							<input
 								type="radio"
 								name="rankFilter"
@@ -223,8 +220,7 @@ export default function Dashboard() {
 				)}
 			</div>
 
-			{/* Gráfico */}
-			<div className="bg-white rounded-lg shadow p-6">
+			<div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
 				<Bar
 					data={{
 						labels,
@@ -247,6 +243,14 @@ export default function Dashboard() {
 							y: {
 								beginAtZero: true,
 								max: 10,
+								ticks: {
+									color: "#9ca3af", // cinza-400
+								},
+							},
+							x: {
+								ticks: {
+									color: "#9ca3af", // cinza-400
+								},
 							},
 						},
 					}}

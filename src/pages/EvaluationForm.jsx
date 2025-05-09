@@ -19,7 +19,6 @@ export default function EvaluationForm() {
 		"Conhecimento de Leis",
 	];
 
-	// Mapeia os rótulos visíveis para as chaves esperadas pelo backend
 	const labelToKey = {
 		Ocorrência: "montarOcorrencia",
 		Abordagem: "abordagem",
@@ -82,19 +81,19 @@ export default function EvaluationForm() {
 
 	return (
 		<form
-			className="p-8 bg-white shadow-lg rounded-lg max-w-3xl mx-auto transition-all"
+			className="p-8 bg-white dark:bg-gray-800 shadow-lg rounded-lg max-w-3xl mx-auto transition-all"
 			onSubmit={submitEval}
 		>
-			<h2 className="text-2xl font-semibold text-gray-800 mb-6">
+			<h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
 				Avaliar Oficial
 			</h2>
 
 			<div className="mb-4">
-				<label className="block mb-1 font-medium text-gray-700">
+				<label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
 					Oficial Avaliado
 				</label>
 				<select
-					className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+					className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
 					value={selected}
 					onChange={(e) => setSelected(e.target.value)}
 				>
@@ -134,14 +133,16 @@ export default function EvaluationForm() {
 			<div className="grid sm:grid-cols-2 gap-4">
 				{skillList.map((skill) => (
 					<div key={skill} className="flex flex-col">
-						<label className="mb-1 text-gray-700">{skill}</label>
+						<label className="mb-1 text-gray-700 dark:text-gray-300">
+							{skill}
+						</label>
 						<input
 							type="number"
 							min="0"
 							max="10"
 							value={skills[skill] ?? ""}
 							onChange={(e) => handleChange(skill, e.target.value)}
-							className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+							className="px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
 							placeholder="Nota de 0 a 10"
 						/>
 					</div>
@@ -149,13 +150,13 @@ export default function EvaluationForm() {
 			</div>
 
 			{error && (
-				<div className="mt-4 flex items-center text-sm text-red-600 bg-red-100 p-3 rounded-md">
+				<div className="mt-4 flex items-center text-sm text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-800/20 p-3 rounded-md">
 					<AlertTriangle className="w-5 h-5 mr-2" /> {error}
 				</div>
 			)}
 
 			{success && (
-				<div className="mt-4 flex items-center text-sm text-green-700 bg-green-100 p-3 rounded-md">
+				<div className="mt-4 flex items-center text-sm text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-800/20 p-3 rounded-md">
 					<CheckCircle className="w-5 h-5 mr-2" /> Avaliação salva com sucesso!
 				</div>
 			)}

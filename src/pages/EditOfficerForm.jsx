@@ -56,13 +56,13 @@ export default function EditOfficerForm({ officer, onCancel, onSuccess }) {
 				type="text"
 				value={formData.name}
 				onChange={(e) => handleChange("name", e.target.value)}
-				className="w-full px-3 py-2 border rounded-md"
+				className="w-full px-3 py-2 border rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
 				placeholder="Nome"
 			/>
 			<select
 				value={formData.rank}
 				onChange={(e) => handleChange("rank", e.target.value)}
-				className="w-full px-3 py-2 border rounded-md"
+				className="w-full px-3 py-2 border rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
 			>
 				{ranks.map((r) => (
 					<option key={r}>{r}</option>
@@ -72,13 +72,13 @@ export default function EditOfficerForm({ officer, onCancel, onSuccess }) {
 				type="date"
 				value={formData.startDate}
 				onChange={(e) => handleChange("startDate", e.target.value)}
-				className="w-full px-3 py-2 border rounded-md"
+				className="w-full px-3 py-2 border rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
 			/>
 			<div className="flex justify-end space-x-3">
 				<button
 					type="button"
 					onClick={onCancel}
-					className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300"
+					className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-700"
 				>
 					Cancelar
 				</button>

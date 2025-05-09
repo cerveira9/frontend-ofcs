@@ -31,11 +31,6 @@ export default function OfficerList() {
 
 	const flagRules = {
 		Cadete: { green: 5, yellow: 7 },
-		// 'Patrol Officer': { green: 5, yellow: 7 },
-		// 'Police Officer': { green: 6, yellow: 8 },
-		// 'Senior Officer': { green: 7, yellow: 9 },
-		// 'Deputy': { green: 10, yellow: 15 },
-		// 'Senior Deputy': { green: 15, yellow: 19 }
 	};
 
 	const getFlagColor = (rank, startDate) => {
@@ -92,14 +87,16 @@ export default function OfficerList() {
 
 	if (loading)
 		return (
-			<div className="text-center text-gray-500">Carregando oficiais...</div>
+			<div className="text-center text-gray-500 dark:text-gray-400">
+				Carregando oficiais...
+			</div>
 		);
 
 	return (
 		<div className="space-y-10">
 			{grouped.map((group) => (
 				<div key={group.rank}>
-					<h2 className="text-xl font-bold text-gray-700 border-b border-gray-300 mb-4">
+					<h2 className="text-xl font-bold text-gray-700 dark:text-gray-100 border-b border-gray-300 dark:border-gray-700 mb-4">
 						{group.rank} ({group.items.length})
 					</h2>
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -111,7 +108,7 @@ export default function OfficerList() {
 							return (
 								<div
 									key={officer._id}
-									className={`relative group bg-white border border-gray-200 rounded-xl p-5 shadow-sm transition-all duration-300 overflow-visible min-w-[280px]
+									className={`relative group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm transition-all duration-300 overflow-visible min-w-[280px]
                     ${
 											isEditing || isViewing
 												? "col-span-1 sm:col-span-2 lg:col-span-3 w-full"
@@ -135,15 +132,15 @@ export default function OfficerList() {
 									<div className="flex justify-between items-start">
 										<div className="w-full">
 											<div className="flex items-center mb-1">
-												<h3 className="text-lg font-semibold text-gray-900">
+												<h3 className="text-lg font-semibold text-gray-900 dark:text-white">
 													{officer.name}
 												</h3>
 											</div>
-											<p className="text-sm text-gray-500">
+											<p className="text-sm text-gray-500 dark:text-gray-400">
 												Início:{" "}
 												{new Date(officer.startDate).toLocaleDateString()}
 											</p>
-											<p className="text-sm text-gray-500">
+											<p className="text-sm text-gray-500 dark:text-gray-400">
 												Registro:{" "}
 												{new Date(officer.registerDate).toLocaleDateString()}
 											</p>
@@ -151,9 +148,8 @@ export default function OfficerList() {
 
 										{!(isEditing || isViewing) && (
 											<div className="absolute top-3 right-3 grid grid-cols-2 gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200">
-												{/* Promover */}
 												<button
-													className="p-2 rounded-full bg-green-100 text-green-700 hover:bg-green-200 hover:text-green-900 shadow"
+													className="p-2 rounded-full bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200 hover:bg-green-200 hover:dark:bg-green-700 hover:text-green-900"
 													onClick={async () => {
 														const nextRankIndex =
 															hierarchy.indexOf(officer.rank) + 1;
@@ -171,9 +167,7 @@ export default function OfficerList() {
 
 														try {
 															await api.put(
-																`${
-																	import.meta.env.VITE_API_BASE_URL
-																}/officers/promoverOficial/${officer._id}`
+																`${import.meta.env.VITE_API_BASE_URL}/officers/promoverOficial/${officer._id}`
 															);
 															fetchOfficers();
 														} catch {
@@ -185,9 +179,8 @@ export default function OfficerList() {
 													<ArrowUp size={18} />
 												</button>
 
-												{/* Avaliações */}
 												<button
-													className="p-2 rounded-full bg-gray-100 hover:bg-indigo-100 text-indigo-600 hover:text-indigo-800"
+													className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-indigo-100 hover:dark:bg-indigo-800 text-indigo-600 dark:text-indigo-300"
 													onClick={() => {
 														setViewingEvalId(officer._id);
 														stopEditing();
@@ -197,9 +190,8 @@ export default function OfficerList() {
 													<FileSearch size={18} />
 												</button>
 
-												{/* Editar */}
 												<button
-													className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-600 hover:text-blue-800"
+													className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-blue-100 hover:dark:bg-blue-800 text-blue-600 dark:text-blue-300"
 													onClick={() => {
 														setEditingId(officer._id);
 														stopViewing();
@@ -209,9 +201,8 @@ export default function OfficerList() {
 													<Pencil size={18} />
 												</button>
 
-												{/* Excluir */}
 												<button
-													className="p-2 rounded-full bg-gray-100 hover:bg-red-100 text-red-600 hover:text-red-800"
+													className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-red-100 hover:dark:bg-red-800 text-red-600 dark:text-red-300"
 													onClick={() => handleDelete(officer._id)}
 													title="Excluir"
 												>
@@ -222,7 +213,7 @@ export default function OfficerList() {
 									</div>
 
 									{isEditing && (
-										<div className="mt-4 border-t pt-4">
+										<div className="mt-4 border-t border-gray-200 dark:border-gray-600 pt-4">
 											<EditOfficerForm
 												officer={officer}
 												onCancel={stopEditing}
@@ -235,7 +226,7 @@ export default function OfficerList() {
 									)}
 
 									{isViewing && (
-										<div className="mt-4 border-t pt-4">
+										<div className="mt-4 border-t border-gray-200 dark:border-gray-600 pt-4">
 											<ViewEvaluations officerId={officer._id} />
 										</div>
 									)}

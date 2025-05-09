@@ -22,7 +22,7 @@ export default function UserRegister() {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
+						Authorization: `Bearer ${token}`,
 					},
 				}
 			);
@@ -42,55 +42,55 @@ export default function UserRegister() {
 
 	return (
 		<form
-			className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow"
+			className="max-w-lg mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow"
 			onSubmit={handleSubmit}
 		>
-			<h2 className="text-2xl font-semibold mb-6 text-gray-800">
+			<h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
 				Cadastrar Novo Usuário
 			</h2>
 
-			{error && <p className="text-red-500 mb-4">{error}</p>}
-			{success && <p className="text-green-600 mb-4">{success}</p>}
+			{error && <p className="text-red-500 dark:text-red-400 mb-4">{error}</p>}
+			{success && <p className="text-green-600 dark:text-green-400 mb-4">{success}</p>}
 
 			<div className="mb-4">
-				<label className="block mb-1 text-gray-700">Usuário</label>
+				<label className="block mb-1 text-gray-700 dark:text-gray-300">Usuário</label>
 				<input
 					type="text"
 					value={username}
 					onChange={(e) => setUsername(e.target.value)}
 					required
-					className="w-full border px-3 py-2 rounded-md"
+					className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-3 py-2 rounded-md"
 				/>
 			</div>
 
 			<div className="mb-4">
-				<label className="block mb-1 text-gray-700">Senha</label>
+				<label className="block mb-1 text-gray-700 dark:text-gray-300">Senha</label>
 				<input
 					type="password"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					required
-					className="w-full border px-3 py-2 rounded-md"
+					className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-3 py-2 rounded-md"
 				/>
 			</div>
 
 			<div className="mb-4">
-				<label className="block mb-1 text-gray-700">Oficial</label>
+				<label className="block mb-1 text-gray-700 dark:text-gray-300">Oficial</label>
 				<input
 					type="text"
 					value={officerName}
 					onChange={(e) => setOfficerName(e.target.value)}
 					required
-					className="w-full border px-3 py-2 rounded-md"
+					className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-3 py-2 rounded-md"
 				/>
 			</div>
 
 			<div className="mb-6">
-				<label className="block mb-1 text-gray-700">Role</label>
+				<label className="block mb-1 text-gray-700 dark:text-gray-300">Role</label>
 				<select
 					value={role}
 					onChange={(e) => setRole(e.target.value)}
-					className="w-full border px-3 py-2 rounded-md"
+					className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-3 py-2 rounded-md"
 				>
 					<option value="federal">Federal</option>
 					<option value="admin">Admin</option>

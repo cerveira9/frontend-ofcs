@@ -17,7 +17,9 @@ export default function ViewEvaluations({ officerId }) {
 
 	if (!evaluations.length) {
 		return (
-			<p className="text-gray-500 text-sm">Nenhuma avaliação encontrada.</p>
+			<p className="text-gray-500 dark:text-gray-400 text-sm">
+				Nenhuma avaliação encontrada.
+			</p>
 		);
 	}
 
@@ -36,10 +38,10 @@ export default function ViewEvaluations({ officerId }) {
 			{evaluations.map((evalItem, idx) => (
 				<div
 					key={evalItem._id}
-					className="bg-gray-100 rounded-md p-3 shadow-inner"
+					className="bg-gray-100 dark:bg-gray-800 rounded-md p-3 shadow-inner"
 				>
 					<div
-						className="cursor-pointer text-blue-600 font-semibold hover:underline"
+						className="cursor-pointer text-blue-600 dark:text-blue-400 font-semibold hover:underline"
 						onClick={() => toggleIndex(idx)}
 					>
 						Data: {new Date(evalItem.date).toLocaleDateString()} | Patente:{" "}
@@ -48,12 +50,12 @@ export default function ViewEvaluations({ officerId }) {
 					</div>
 
 					{openIndex === idx && (
-						<div className="mt-2 text-sm text-gray-700 space-y-1">
+						<div className="mt-2 text-sm text-gray-700 dark:text-gray-200 space-y-1">
 							{evalItem.skills &&
 								Object.entries(evalItem.skills).map(([skill, value]) => (
 									<div
 										key={skill}
-										className="flex justify-between py-1 border-b text-sm text-gray-700"
+										className="flex justify-between py-1 border-b border-gray-300 dark:border-gray-600 text-sm"
 									>
 										<span>{skillLabels[skill] || skill}</span>
 										<span className="font-semibold">{value}</span>
