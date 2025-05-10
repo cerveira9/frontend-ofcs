@@ -60,12 +60,25 @@ export default function OfficerList({ userRole }) {
 	}, [editingId, viewingEvalId]);
 
 	const fetchOfficers = async () => {
-		const res = await api.get(
-			`${import.meta.env.VITE_API_BASE_URL}/officers/mostrarOficiais`
-		);
-		setOfficers(res.data);
-		setLoading(false);
-	};
+    const res = await api.get(
+        `${import.meta.env.VITE_API_BASE_URL}/officers/mostrarOficiais`
+    );
+    const officersWithEvaluations = await Promise.all(
+        res.data.map(async (officer) => {
+            try {
+                const evalRes = await api.get(
+                    `${import.meta.env.VITE_API_BASE_URL}/evaluations/${officer._id}`
+                );
+                return { ...officer, evaluationsCount: evalRes.data.length };
+            } catch (error) {
+                console.error(`Erro ao buscar avaliações para o oficial ${officer._id}:`, error);
+                return { ...officer, evaluationsCount: 0 }; // Retorna 0 caso ocorra erro
+            }
+        })
+    );
+    setOfficers(officersWithEvaluations);
+    setLoading(false);
+};
 
 	const handleDelete = async (id) => {
 		if (!window.confirm("Você confirma a exclusão do oficial?")) return;
@@ -137,12 +150,15 @@ export default function OfficerList({ userRole }) {
 												</h3>
 											</div>
 											<p className="text-sm text-gray-500 dark:text-gray-400">
-												Início:{" "}
+												<span className="font-bold">Início:</span>{" "}
 												{new Date(officer.startDate).toLocaleDateString()}
 											</p>
-											<p className="text-sm text-gray-500 dark:text-gray-400">
+											{/* <p className="text-sm text-gray-500 dark:text-gray-400">
 												Registro:{" "}
 												{new Date(officer.registerDate).toLocaleDateString()}
+											</p> */}
+											<p className="text-sm text-gray-500 dark:text-gray-400">
+												<span className="font-bold">Avaliações:</span> {officer.evaluationsCount}
 											</p>
 										</div>
 
