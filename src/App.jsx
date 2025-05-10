@@ -118,7 +118,7 @@ export default function App() {
 				{activeTab === "avaliacao" && <EvaluationForm />}
 				{activeTab === "lista" && <OfficerList userRole={userRole} />}
 				{activeTab === "usuarios" && userRole === "admin" && <UserRegister />}
-				{activeTab === "dashboard" && userRole === "admin" && <Dashboard />}
+				{activeTab === "dashboard" && <Dashboard />}
 				{activeTab === "logs" && userRole === "admin" && <AuditLogsPage />}
 				{activeTab === "senha" && <ChangePassword />}
 			</div>

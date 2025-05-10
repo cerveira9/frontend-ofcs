@@ -8,10 +8,10 @@ export default function Sidemenu({ activeTab, setActiveTab, handleLogout, userRo
         { key: "cadastro", label: "Cadastro de Oficial" },
         { key: "avaliacao", label: "Avaliação de Oficial" },
         { key: "lista", label: "Lista de Oficiais" },
+        { key: "dashboard", label: "Dashboard" },
         ...(userRole === "admin"
             ? [
                   { key: "usuarios", label: "Cadastro de Usuários" },
-                  { key: "dashboard", label: "Dashboard" },
                   { key: "logs", label: "Logs de Auditoria" },
               ]
             : []),
