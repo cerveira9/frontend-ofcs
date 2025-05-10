@@ -83,7 +83,11 @@ export default function Dashboard() {
 	};
 
 	if (!data)
-		return <div className="text-center text-gray-500 dark:text-gray-300">Carregando dados...</div>;
+		return (
+			<div className="text-center text-gray-500 dark:text-gray-300">
+				Carregando dados...
+			</div>
+		);
 
 	const skills = Object.entries(skillLabels);
 	const currentSet =
@@ -139,19 +143,25 @@ export default function Dashboard() {
 
 			<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 				<div className="bg-blue-100 dark:bg-blue-900 p-6 rounded-lg shadow text-center">
-					<h2 className="text-gray-700 dark:text-gray-100 font-medium">Total de Oficiais</h2>
+					<h2 className="text-gray-700 dark:text-gray-100 font-medium">
+						Total de Oficiais
+					</h2>
 					<p className="text-3xl font-bold text-blue-900 dark:text-blue-200">
 						{data.totalOfficers}
 					</p>
 				</div>
 				<div className="bg-green-100 dark:bg-green-900 p-6 rounded-lg shadow text-center">
-					<h2 className="text-gray-700 dark:text-gray-100 font-medium">Avaliações Realizadas</h2>
+					<h2 className="text-gray-700 dark:text-gray-100 font-medium">
+						Avaliações Realizadas
+					</h2>
 					<p className="text-3xl font-bold text-green-900 dark:text-green-200">
 						{data.totalEvaluations}
 					</p>
 				</div>
 				<div className="bg-purple-100 dark:bg-purple-900 p-6 rounded-lg shadow text-center">
-					<h2 className="text-gray-700 dark:text-gray-100 font-medium">Oficiais Avaliados</h2>
+					<h2 className="text-gray-700 dark:text-gray-100 font-medium">
+						Oficiais Avaliados
+					</h2>
 					<p className="text-3xl font-bold text-purple-900 dark:text-purple-200">
 						{data.evaluatedOfficers}
 					</p>
@@ -193,7 +203,10 @@ export default function Dashboard() {
 							Selecionar Patente:
 						</label>
 						{patents.map((rank) => (
-							<label key={rank} className="flex items-center gap-2 text-sm dark:text-white">
+							<label
+								key={rank}
+								className="flex items-center gap-2 text-sm dark:text-white"
+							>
 								<input
 									type="radio"
 									name="rankFilter"

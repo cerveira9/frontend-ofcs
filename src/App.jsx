@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import DashboardSummary from "./pages/DashboardSummary";
 import OfficerForm from "./pages/OfficerForm";
 import EvaluationForm from "./pages/EvaluationForm";
 import OfficerList from "./pages/OfficerList";
@@ -13,7 +14,7 @@ import Sidemenu from "./components/Sidemenu";
 import Header from "./components/Header";
 
 export default function App() {
-	const [activeTab, setActiveTab] = useState("cadastro");
+	const [activeTab, setActiveTab] = useState("inicial");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userRole, setUserRole] = useState(null);
     const [theme, setTheme] = useState("light");
@@ -79,6 +80,7 @@ export default function App() {
 		setIsAuthenticated(true);
 		setUserRole(decoded.role);
 		axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+		setActiveTab("inicial");
 	};
 
 	const handleLogout = () => {
@@ -86,7 +88,7 @@ export default function App() {
 		delete axios.defaults.headers.common["Authorization"];
 		setIsAuthenticated(false);
 		setUserRole(null);
-		setActiveTab("cadastro");
+		setActiveTab("inicial");
 	};
 
 	if (!isAuthenticated) {
@@ -114,6 +116,7 @@ export default function App() {
 					isMenuOpen ? "ml-64" : "ml-0"
 				} pt-24`}
 			>
+				{activeTab === "inicial" && <DashboardSummary />}
 				{activeTab === "cadastro" && <OfficerForm />}
 				{activeTab === "avaliacao" && <EvaluationForm />}
 				{activeTab === "lista" && <OfficerList userRole={userRole} />}
