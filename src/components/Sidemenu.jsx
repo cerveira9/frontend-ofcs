@@ -5,6 +5,7 @@ export default function Sidemenu({ activeTab, setActiveTab, handleLogout, userRo
     const [isOpen, setIsOpen] = useState(false);
 
     const menuItems = [
+        { key: "inicial", label: "Início" },
         { key: "cadastro", label: "Cadastro de Oficial" },
         { key: "avaliacao", label: "Avaliação de Oficial" },
         { key: "lista", label: "Lista de Oficiais" },
